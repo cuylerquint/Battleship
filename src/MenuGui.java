@@ -44,7 +44,7 @@ public class MenuGui implements ActionListener {
 		menuBar.add(menu);
 		CVC = new JMenuItem("AI vs. AI");
 		CVC.addActionListener(this);
-		HVC = new JMenuItem("Human vs. AI");
+		HVC = new JMenuItem("AI vs. Human");
 		HVC.addActionListener(this);
 		menu.add(CVC);
 		menu.add(HVC);

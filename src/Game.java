@@ -24,6 +24,7 @@ public class Game {
 
 	public void handle(int temp, int player) {
 		
+		
 		if (player == 1) {
 			if (p2DisplayGrid[temp].getText().equals("D")) {
 				p2.d.health = p2.d.health - 1;
