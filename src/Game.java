@@ -18,6 +18,7 @@ public class Game {
 		this.playing = true;
 		this.p1Turn = true;
 		this.isPicking = true;
+		
 
 	}
 
