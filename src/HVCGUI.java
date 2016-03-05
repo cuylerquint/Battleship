@@ -7,7 +7,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -16,9 +18,9 @@ public class HVCGUI extends JFrame implements ActionListener {
 
 	// bring in parameter for player use paratmers in main to start game
 
-	JPanel playerSide = new JPanel(new BorderLayout());
-	JPanel topPanel = new JPanel(new GridLayout(1, 1));
-	JPanel AISide = new JPanel(new BorderLayout());
+//	JPanel playerSide = new JPanel(new BorderLayout());
+//	JPanel topPanel = new JPanel(new GridLayout(1, 1));
+//	JPanel AISide = new JPanel(new BorderLayout());
 	JTextArea tA = new JTextArea();
 	JScrollPane scroll;
 	
@@ -35,38 +37,241 @@ public class HVCGUI extends JFrame implements ActionListener {
 	int count = 1;
 
 	int GRID_SIZE = 9;
+	
+	
+	
+	JPanel playerSide = new JPanel(new GridLayout(2, 1));
+	JPanel AISide = new JPanel(new GridLayout(2, 1));
+	JPanel topPanel = new JPanel(new GridLayout(1, 1));
+	JProgressBar p1LBar;
+	JProgressBar p1DH;
+	JProgressBar p1SH;
+	JProgressBar p1AH;
+	JProgressBar p1BH;
+	JProgressBar p2LBar;
+	JProgressBar p2DH;
+	JProgressBar p2SH;
+	JProgressBar p2AH;
+	JProgressBar p2BH;
 
 	public HVCGUI(Game game) throws InterruptedException {
 		this.game = game;
 		P1StringShipArray = game.p1.setAIShipGrid();
 		P2StringShipArray = game.p2.setAIShipGrid();
-		
 		intiFrame();
 	}
-
+	
+	
 	private void intiFrame() throws InterruptedException {
-
+		
 		this.setTitle("BattleShip");
-		tA.setEditable(false);
-		scroll = new JScrollPane(tA);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		playerSide.add(createFirePane(), BorderLayout.NORTH);
+		playerSide.add(createFirePane());
 //		disablePlayerFireGrid();
-		playerSide.add(setHumanStringToButton(P1StringShipArray), BorderLayout.SOUTH);
-		AISide.add(setAIStringToButton(P2StringShipArray), BorderLayout.NORTH);
-		hideAIGrid();
-		AISide.add(scroll, BorderLayout.CENTER);
+		playerSide.add(setP1StringToButton(P1StringShipArray));
+		// add player ship placement
+		AISide.add(setP2StringToButton(P2StringShipArray));
+		AISide.add(setP1StateusGrid());
 		topPanel.add(playerSide);
 		topPanel.add(AISide);
-		tA.setText("Welcome to battleShip place your ships");
-		disanblePlayerDisGrid();
+		p1DisplayGrid[0].setText("DG");
+		p2DisplayGrid[0].setText("P2");
+		
 		this.setContentPane(topPanel);
-		this.setSize(800, 800);
+		this.setSize(750, 470);
 		this.setVisible(true);
+		setGameBoard();
+		
 		initThread();
 
-		
 	}
+	
+	private Container setP1StateusGrid() {
+		JPanel tempJPanel = new JPanel(new BorderLayout());
+		JPanel grid = new JPanel(new GridLayout(10, 1));
+		JLabel p1LJLabel = new JLabel();
+		p1LJLabel.setText("Boats");
+		p1LBar = new JProgressBar(0, 4);
+		p1LBar.setValue(game.p1.lives);
+		JLabel p1DL = new JLabel();
+		p1DL.setText("Destroyer");
+		p1DH = new JProgressBar(0, 3);
+		p1DH.setValue(game.p1.d.health);
+		JLabel p1SL = new JLabel();
+		p1SL.setText("Submarine");
+		p1SH = new JProgressBar(0, 3);
+		p1SH.setValue(game.p1.s.health);
+		JLabel p1AL = new JLabel();
+		p1AL.setText("Aircraft Carrier");
+		p1AH = new JProgressBar(0, 5);
+		p1AH.setValue(game.p1.a.health);
+		JLabel p1BL = new JLabel();
+		p1BL.setText("Battleship");
+		p1BH = new JProgressBar(0, 4);
+		p1BH.setValue(game.p1.b.health);
+
+		grid.add(p1LJLabel);
+		grid.add(p1LBar);
+		grid.add(p1DL);
+		grid.add(p1DH);
+		grid.add(p1SL);
+		grid.add(p1SH);
+		grid.add(p1AL);
+		grid.add(p1AH);
+		grid.add(p1BL);
+		grid.add(p1BH);
+		tempJPanel.add(grid, BorderLayout.NORTH);
+		return tempJPanel;
+
+	}
+	
+	private Container setP2StateusGrid() {
+		JPanel tempJPanel = new JPanel(new BorderLayout());
+		JPanel grid = new JPanel(new GridLayout(10, 1));
+		JLabel p2LJLabel = new JLabel();
+		p2LJLabel.setText("Boats");
+		p2LBar = new JProgressBar(0, 4);
+		p2LBar.setValue(game.p2.lives);
+		JLabel p2DL = new JLabel();
+		p2DL.setText("Destroyer");
+		p2DH = new JProgressBar(0, 3);
+		p2DH.setValue(game.p2.d.health);
+		JLabel p2SL = new JLabel();
+		p2SL.setText("Submarine");
+		p2SH = new JProgressBar(0, 3);
+		p2SH.setValue(game.p2.s.health);
+		JLabel p2AL = new JLabel();
+		p2AL.setText("Aircraft Carrier");
+		p2AH = new JProgressBar(0, 5);
+		p2AH.setValue(game.p2.a.health);
+		JLabel p2BL = new JLabel();
+		p2BL.setText("Battleship");
+		p2BH = new JProgressBar(0, 4);
+		p2BH.setValue(game.p2.b.health);
+
+		grid.add(p2LJLabel);
+		grid.add(p2LBar);
+		grid.add(p2DL);
+		grid.add(p2DH);
+		grid.add(p2SL);
+		grid.add(p2SH);
+		grid.add(p2AL);
+		grid.add(p2AH);
+		grid.add(p2BL);
+		grid.add(p2BH);
+		tempJPanel.add(grid, BorderLayout.NORTH);
+
+		return tempJPanel;
+
+	}
+
+	private void updateBars() {
+		p1LBar.setValue(game.p1.lives);
+		p1SH.setValue(game.p1.s.health);
+		p1AH.setValue(game.p1.a.health);
+		p1DH.setValue(game.p1.d.health);
+		p1BH.setValue(game.p1.b.health);
+
+		p2LBar.setValue(game.p2.lives);
+		p2SH.setValue(game.p2.s.health);
+		p2AH.setValue(game.p2.a.health);
+		p2DH.setValue(game.p2.d.health);
+		p2BH.setValue(game.p2.b.health);
+
+	}
+	
+	
+	public Container setP1StringToButton(String[] temp) {
+		int numButtons = GRID_SIZE * GRID_SIZE;
+		JPanel grid = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
+		p1DisplayGrid = new JButton[numButtons];
+		for (int i = 0; i < numButtons; i++) {
+			p1DisplayGrid[i] = new JButton("");
+			p1DisplayGrid[i].setActionCommand("" + i);
+			p1DisplayGrid[i].addActionListener(this);
+			p1DisplayGrid[i].setBackground(Color.BLUE);
+			p1DisplayGrid[i].setOpaque(true);
+			grid.add(p1DisplayGrid[i]);
+		}
+
+		for (int i = 0; i < 81; i++) {
+			if (temp[i] == ("A")) {
+				p1DisplayGrid[i].setText("A");
+			} else if (temp[i] == ("B")) {
+				p1DisplayGrid[i].setText("B");
+			} else if (temp[i] == ("D")) {
+				p1DisplayGrid[i].setText("D");
+			} else if (temp[i] == ("S")) {
+				p1DisplayGrid[i].setText("S");
+			}
+		}
+
+		setHeadings(p1DisplayGrid);
+		return grid;
+
+	}
+	
+	public Container setP2StringToButton(String[] temp) {
+		int numButtons = GRID_SIZE * GRID_SIZE;
+		JPanel grid = new JPanel(new GridLayout(GRID_SIZE, GRID_SIZE));
+		p2DisplayGrid = new JButton[numButtons];
+		for (int i = 0; i < numButtons; i++) {
+			p2DisplayGrid[i] = new JButton("");
+			p2DisplayGrid[i].setActionCommand("" + i);
+			p2DisplayGrid[i].addActionListener(this);
+			p2DisplayGrid[i].setBackground(Color.BLUE);
+			p2DisplayGrid[i].setOpaque(true);
+			grid.add(p2DisplayGrid[i]);
+		}
+
+		for (int i = 0; i < 81; i++) {
+			if (temp[i] == ("A")) {
+				p2DisplayGrid[i].setText("A");
+			} else if (temp[i] == ("B")) {
+				p2DisplayGrid[i].setText("B");
+			} else if (temp[i] == ("D")) {
+				p2DisplayGrid[i].setText("D");
+			} else if (temp[i] == ("S")) {
+				p2DisplayGrid[i].setText("S");
+			}
+		}
+
+		setHeadings(p2DisplayGrid);
+		p2DisplayGrid[0].setText("CG");
+		return grid;
+
+	}
+	
+	private void setGameBoard() {
+		game.p1DisplayGrid = p1DisplayGrid;
+		game.p2DisplayGrid = p2DisplayGrid;
+
+	}
+
+
+
+//	private void intiFrame() throws InterruptedException {
+//
+//		this.setTitle("BattleShip");
+//		tA.setEditable(false);
+//		scroll = new JScrollPane(tA);
+//		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//		playerSide.add(createFirePane(), BorderLayout.NORTH);
+//		disablePlayerFireGrid();
+//		playerSide.add(setHumanStringToButton(P1StringShipArray), BorderLayout.SOUTH);
+//		AISide.add(setAIStringToButton(P2StringShipArray), BorderLayout.NORTH);
+//		hideAIGrid();
+//		AISide.add(scroll, BorderLayout.CENTER);
+//		topPanel.add(playerSide);
+//		topPanel.add(AISide);
+//		tA.setText("Welcome to battleShip place your ships");
+//		disanblePlayerDisGrid();
+//		this.setContentPane(topPanel);
+//		this.setSize(800, 800);
+//		this.setVisible(true);
+//		initThread();
+//
+//		
+//	}
 
 	public void hideAIGrid() {
 		for (int i = 0; i < p2DisplayGrid.length; i++) {
@@ -184,6 +389,7 @@ public class HVCGUI extends JFrame implements ActionListener {
 	}
 
 	private void initThread() {
+//		System.out.println("started thread");
 		Thread worker = new Thread() {
 			public void run() {
 				try {

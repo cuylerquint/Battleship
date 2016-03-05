@@ -11,6 +11,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import org.xml.sax.HandlerBase;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,21 +22,24 @@ public class MenuGui implements ActionListener {
 	Random rGP = new Random();
 	Random rGA = new Random();
 	JFrame CVCGUI = new JFrame();
-	
-	
-	static JFrame resultFrame = new JFrame("AI vs. AI Difficulty Select");
-	static JFrame CVCDIFF = new JFrame("AI vs. AI Difficulty Select");
+	JFrame HVCGUI = new JFrame();
+
+	static JFrame resultFrame = new JFrame();
+	static JFrame CVCDIFF = new JFrame();
+	static JFrame CVHDIFF = new JFrame();
+
 	JRadioButton p1E = new JRadioButton("Easy");
 	JRadioButton p1M = new JRadioButton("Medium");
 	JRadioButton p1H = new JRadioButton("Hard");
-	
+
 	JRadioButton p2E = new JRadioButton("Easy");
 	JRadioButton p2M = new JRadioButton("Medium");
 	JRadioButton p2H = new JRadioButton("Hard");
 
 	int p1Difficulty;
 	int p2Difficulty;
-	
+
+	boolean isHVC;
 
 	public JMenuBar createMenu() {
 		JMenuBar menuBar = new JMenuBar();
@@ -95,31 +100,17 @@ public class MenuGui implements ActionListener {
 	//
 	// }
 
-	private void NewGameCVC() throws InterruptedException {
-
-		initCVCDIFF();
-
-		// CVCDIFF.setContentPane(contentPane);
-
-		// pop up off choice to give new gui parmeters for new game type
-		// once parameters are meet create new gui class
-		// maybe pass game object into the new class
-
-	}
-
 	private void initCVCDIFF() throws InterruptedException {
+		isHVC = false;
 		CVCDIFF = new JFrame("AI vs. AI Difficulty Select");
 		JPanel topPanel = new JPanel(new GridLayout(5, 1));
-		
+
 		JLabel p1L = new JLabel("Player 1");
 		JLabel p2L = new JLabel("Player 2");
 		JButton start = new JButton("Start");
 		start.addActionListener(this);
 		JPanel p1RB = new JPanel(new FlowLayout());
 		JPanel p2RB = new JPanel(new FlowLayout());
-		
-		
-		
 
 		ButtonGroup group1 = new ButtonGroup();
 		group1.add(p1E);
@@ -128,7 +119,7 @@ public class MenuGui implements ActionListener {
 		p1RB.add(p1E);
 		p1RB.add(p1M);
 		p1RB.add(p1H);
-		
+
 		ButtonGroup group2 = new ButtonGroup();
 		group2.add(p2E);
 		group2.add(p2M);
@@ -136,27 +127,22 @@ public class MenuGui implements ActionListener {
 		p2RB.add(p2E);
 		p2RB.add(p2M);
 		p2RB.add(p2H);
-		
-		
-	
+
 		topPanel.add(p1L);
 		topPanel.add(p1RB);
 		topPanel.add(p2L);
 		topPanel.add(p2RB);
 		topPanel.add(start);
-		
-		
+
 		CVCDIFF.setContentPane(topPanel);
 		CVCDIFF.setSize(250, 200);
 		CVCDIFF.setVisible(true);
-		
 
 		// CVCGUI frame = new CVCGUI(game);
 
 		// TODO Auto-generated method stub
 
 	}
-
 
 	public void actionPerformed(ActionEvent e) {
 		String classname = getClassName(e.getSource());
@@ -167,15 +153,16 @@ public class MenuGui implements ActionListener {
 
 			if (menutext.equals("AI vs. AI")) {
 				try {
-					NewGameCVC();
+					initCVCDIFF();
+					// NewGameCVC();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
-			} else if (menutext.equals("Human vs. AI")) {
+			} else if (menutext.equals("AI vs. Human")) {
 				try {
-					NewGameHVC();
+					initCVHDIFF();
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -184,92 +171,117 @@ public class MenuGui implements ActionListener {
 		}
 		if (classname.equals("JButton")) {
 			JButton button = (JButton) (e.getSource());
-			if (button.getText().equals("New Game")){
+			if (button.getText().equals("New Game")) {
 				resultFrame.dispose();
 				CVCGUI.dispose();
-				
+
 			}
-			if (button.getText().equals("Start")){
+			if (button.getText().equals("Start")) {
 				
-				Player p1 = new Player(true, 0);
-				Player p2 = new Player(true, 0);
-				
-				Game game = new Game(p1, p2);
-				
-				game.p1.difficulty = setDiff(1);
-				game.p2.difficulty = setDiff(2);
-				
-				try {
-					CVCGUI = new CVCGUI(game);
-//					CVCGUI frame = new CVCGUI(game);
-					if(game.playing == false){
-						displayResult(game);
+				if (isHVC) {
+					
+					Player p1 = new Player(true, 0);
+					Player p2 = new Player(true, 0);
+					Game game = new Game(p1, p2);
+					game.p1.difficulty = 0;
+					game.p2.difficulty = setDiff(1);
+					try {
+						System.out.println("isHVC:" + isHVC);
+						HVCGUI = new HVCGUI(game);
+					} catch (Exception e2) {
+					}
+				} else {
+					Player p1 = new Player(true, 0);
+					Player p2 = new Player(true, 0);
+
+					Game game = new Game(p1, p2);
+
+					game.p1.difficulty = setDiff(1);
+					game.p2.difficulty = setDiff(2);
+
+					try {
+						CVCGUI = new CVCGUI(game);
+						// CVCGUI frame = new CVCGUI(game);
+						if (game.playing == false) {
+							displayResult(game);
+						}
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
 					}
 
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
-
 			}
 		}
 
 	}
-	
-	
+
 	private void displayResult(Game game) {
 		resultFrame = new JFrame();
 		JPanel topPanel = new JPanel(new GridLayout(2, 1));
 		JLabel textJLabel = new JLabel();
 		JButton newGameButton = new JButton("New Game");
 		newGameButton.addActionListener(this);
-		if(game.p1Win == true){
+		if (game.p1Win == true) {
 			textJLabel.setText("Player 1 Wins");
-		}else{
+		} else {
 			textJLabel.setText("Player 2 Wins");
 		}
-		
-		
-		
+
 		topPanel.add(textJLabel);
 		topPanel.add(newGameButton);
 		resultFrame.setContentPane(topPanel);
 		resultFrame.setSize(250, 200);
 		resultFrame.setVisible(true);
-		
+
 	}
 
-
 	private int setDiff(int temp) {
-		if(temp == 1){
-			if(p1E.isSelected()){
+		if (temp == 1) { // player 1's set of radio buttons
+			if (p1E.isSelected()) {
 				return 1;
-			}else if(p1M.isSelected()){
+			} else if (p1M.isSelected()) {
 				return 2;
-			}else if(p1H.isSelected()){
+			} else if (p1H.isSelected()) {
 				return 3;
 			}
-		}else{
-			if(p2E.isSelected()){
+		} else {
+			if (p2E.isSelected()) {
 				return 1;
-			}else if(p2M.isSelected()){
+			} else if (p2M.isSelected()) {
 				return 2;
-			}else if(p2H.isSelected()){
+			} else if (p2H.isSelected()) {
 				return 3;
 			}
 		}
 		return -1;
 	}
-	
-	
 
-	private void NewGameHVC() throws InterruptedException {
+	private void initCVHDIFF() throws InterruptedException {
+		isHVC = true;
+		CVHDIFF = new JFrame("AI vs. Human Difficulty Select");
+		JPanel topPanel = new JPanel(new GridLayout(5, 1));
+		JLabel p1L = new JLabel("Player 1");
+		JLabel p2L = new JLabel("Player 2");
+		JButton start = new JButton("Start");
+		start.addActionListener(this);
+		JPanel p1RB = new JPanel(new FlowLayout());
+		JPanel p2RB = new JPanel(new FlowLayout());
 
-		Player p1 = new Player(true, 0);
-		Player p2 = new Player(true, 0);
+		ButtonGroup group1 = new ButtonGroup();
+		group1.add(p1E);
+		group1.add(p1M);
+		group1.add(p1H);
+		p1RB.add(p1E);
+		p1RB.add(p1M);
+		p1RB.add(p1H);
 
-		Game game = new Game(p1, p2);
-		HVCGUI frame = new HVCGUI(game);
+		topPanel.add(p1L);
+		topPanel.add(p1RB);
+		topPanel.add(start);
+
+		CVHDIFF.setContentPane(topPanel);
+		CVHDIFF.setSize(250, 200);
+		CVHDIFF.setVisible(true);
 
 	}
 
