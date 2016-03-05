@@ -48,11 +48,10 @@ public class HVCGUI extends JFrame implements ActionListener {
 	JProgressBar p1SH;
 	JProgressBar p1AH;
 	JProgressBar p1BH;
-	JProgressBar p2LBar;
-	JProgressBar p2DH;
-	JProgressBar p2SH;
-	JProgressBar p2AH;
-	JProgressBar p2BH;
+	
+	
+	
+	
 
 	public HVCGUI(Game game) throws InterruptedException {
 		this.game = game;
@@ -129,35 +128,26 @@ public class HVCGUI extends JFrame implements ActionListener {
 		JPanel grid = new JPanel(new GridLayout(10, 1));
 		JLabel p2LJLabel = new JLabel();
 		p2LJLabel.setText("Boats");
-		p2LBar = new JProgressBar(0, 4);
-		p2LBar.setValue(game.p2.lives);
+		
 		JLabel p2DL = new JLabel();
 		p2DL.setText("Destroyer");
-		p2DH = new JProgressBar(0, 3);
-		p2DH.setValue(game.p2.d.health);
+		
 		JLabel p2SL = new JLabel();
 		p2SL.setText("Submarine");
-		p2SH = new JProgressBar(0, 3);
-		p2SH.setValue(game.p2.s.health);
+		
 		JLabel p2AL = new JLabel();
 		p2AL.setText("Aircraft Carrier");
-		p2AH = new JProgressBar(0, 5);
-		p2AH.setValue(game.p2.a.health);
+		
 		JLabel p2BL = new JLabel();
 		p2BL.setText("Battleship");
-		p2BH = new JProgressBar(0, 4);
-		p2BH.setValue(game.p2.b.health);
-
+		
 		grid.add(p2LJLabel);
-		grid.add(p2LBar);
+		
 		grid.add(p2DL);
-		grid.add(p2DH);
+		
 		grid.add(p2SL);
-		grid.add(p2SH);
 		grid.add(p2AL);
-		grid.add(p2AH);
 		grid.add(p2BL);
-		grid.add(p2BH);
 		tempJPanel.add(grid, BorderLayout.NORTH);
 
 		return tempJPanel;
@@ -171,12 +161,7 @@ public class HVCGUI extends JFrame implements ActionListener {
 		p1DH.setValue(game.p1.d.health);
 		p1BH.setValue(game.p1.b.health);
 
-		p2LBar.setValue(game.p2.lives);
-		p2SH.setValue(game.p2.s.health);
-		p2AH.setValue(game.p2.a.health);
-		p2DH.setValue(game.p2.d.health);
-		p2BH.setValue(game.p2.b.health);
-
+		
 	}
 	
 	
