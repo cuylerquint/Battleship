@@ -407,29 +407,58 @@ public class HVCGUI extends JFrame implements ActionListener {
 	}
 
 	private void startGame() throws InterruptedException {
-
-		while (game.playing) {
-			if (SwingUtilities.isEventDispatchThread()) {
-				System.out.println("EDT ");
-			} else {
-				System.out.println("EDT false");
-
-			}
-			if (game.p1Turn) {
-				System.out.println("p1picking");
-
-			} else {
-				System.out.println("p2turn");
-//				int aiShot = game.p2.fireRan();
-//				p1DisplayGrid[aiShot].doClick();
-//				p1DisplayGrid[aiShot].setText("x");
-				game.p1Turn = true;
-
-			}
+		
+		Thread.sleep(700);
+		updateBars();
+		if (game.p1.lives == 0) {
+			game.playing = false;
+			game.p1Win = false;
+			System.out.println("p2 wins");
+		}
+			// System.exit(1);
+		if (game.p2.lives == 0) {
+			game.playing = false;
+			game.p1Win = true;
+			System.out.println("p1 wins");
+			// System.exit(1);
+		}
+		if (game.p1Turn) {
+			int p1Shot = game.p1.fire(game, game.p1.difficulty);
+			p2DisplayGrid[p1Shot].doClick();
+			game.handle(p1Shot, 1);
+			game.p1Turn = false;
+		} else {// p2 turn
+			int p2Shot = game.p2.fire(game, game.p2.difficulty);
+			p1DisplayGrid[p2Shot].doClick();
+			game.handle(p2Shot, 2);
+			game.p1Turn = true;
 
 		}
-
 	}
+
+
+//		while (game.playing) {
+//			if (SwingUtilities.isEventDispatchThread()) {
+//				System.out.println("EDT ");
+//			} else {
+//				System.out.println("EDT false");
+//
+//			}
+//			if (game.p1Turn) {
+//				System.out.println("p1picking");
+//
+//			} else {
+//				System.out.println("p2turn");
+////				int aiShot = game.p2.fireRan();
+////				p1DisplayGrid[aiShot].doClick();
+////				p1DisplayGrid[aiShot].setText("x");
+//				game.p1Turn = true;
+//
+//			}
+//
+//		}
+//
+//	}
 
 	public Container createFirePane() {
 		int numButtons = GRID_SIZE * GRID_SIZE;
