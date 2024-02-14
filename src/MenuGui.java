@@ -147,11 +147,11 @@ public class MenuGui implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String classname = getClassName(e.getSource());
 
-		if (classname.equals("JMenuItem")) {
+		if ("JMenuItem".equals(classname)) {
 			JMenuItem menusource = (JMenuItem) (e.getSource());
 			String menutext = menusource.getText();
 
-			if (menutext.equals("AI vs. AI")) {
+			if ("AI vs. AI".equals(menutext)) {
 				try {
 					initCVCDIFF();
 					// NewGameCVC();
@@ -160,7 +160,7 @@ public class MenuGui implements ActionListener {
 					e1.printStackTrace();
 				}
 
-			} else if (menutext.equals("AI vs. Human")) {
+			} else if ("AI vs. Human".equals(menutext)) {
 				try {
 					initCVHDIFF();
 				} catch (InterruptedException e1) {
@@ -169,14 +169,14 @@ public class MenuGui implements ActionListener {
 				}
 			}
 		}
-		if (classname.equals("JButton")) {
+		if ("JButton".equals(classname)) {
 			JButton button = (JButton) (e.getSource());
-			if (button.getText().equals("New Game")) {
+			if ("New Game".equals(button.getText())) {
 				resultFrame.dispose();
 				CVCGUI.dispose();
 
 			}
-			if (button.getText().equals("Start")) {
+			if ("Start".equals(button.getText())) {
 				
 				if (isHVC) {
 					
