@@ -932,7 +932,7 @@ public class Player {
 
 	private void setOrent(ArrayList<Integer> hits, String ship) {
 		System.out.println("getting orentation");
-		if (ship.equals("D")) {
+		if ("D".equals(ship)) {
 			if (hits.get(0) + 1 == hits.get(1)
 					|| hits.get(0) - 1 == hits.get(1)) {
 				dIsVert = false;
@@ -940,7 +940,7 @@ public class Player {
 				dIsVert = true;
 			}
 			System.out.println("d vert:" + dIsVert);
-		} else if (ship.equals("S")) {
+		} else if ("S".equals(ship)) {
 			if (hits.get(0) + 1 == hits.get(1)
 					|| hits.get(0) - 1 == hits.get(1)) {
 				sIsVert = false;
@@ -948,7 +948,7 @@ public class Player {
 				sIsVert = true;
 			}
 			System.out.println("s isvert:" + sIsVert);
-		} else if (ship.equals("B")) {
+		} else if ("B".equals(ship)) {
 			if (hits.get(0) + 1 == hits.get(1)
 					|| hits.get(0) - 1 == hits.get(1)) {
 				bIsVert = false;
@@ -956,7 +956,7 @@ public class Player {
 				bIsVert = true;
 			}
 			System.out.println("b isvert:" + bIsVert);
-		} else if (ship.equals("A")) {
+		} else if ("A".equals(ship)) {
 			if (hits.get(0) + 1 == hits.get(1)
 					|| hits.get(0) - 1 == hits.get(1)) {
 				aIsVert = false;

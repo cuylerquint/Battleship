@@ -281,12 +281,12 @@ public class CVCGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String classname = getClassName(e.getSource());
-		if (classname.equals("JButton")) {
+		if ("JButton".equals(classname)) {
 			JButton button = (JButton) (e.getSource());
 
-			if (button.getText().equals("A") || button.getText().equals("B")
-					|| button.getText().equals("D")
-					|| button.getText().equals("S")) {
+			if ("A".equals(button.getText()) || "B".equals(button.getText())
+					|| "D".equals(button.getText())
+					|| "S".equals(button.getText())) {
 				((JButton) e.getSource()).setBackground(Color.RED);
 
 			} else {

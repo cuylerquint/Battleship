@@ -466,7 +466,7 @@ public class HVCGUI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String classname = getClassName(e.getSource());
-		if (classname.equals("JButton")) {
+		if ("JButton".equals(classname)) {
 			JButton button = (JButton) (e.getSource());
 			if (game.p1Turn) {
 				((JButton) e.getSource()).setBackground(Color.BLACK);
